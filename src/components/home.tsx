@@ -1,63 +1,143 @@
 import React, { useState, useEffect } from "react"
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react"
+import { Box, Flex, Button, Text, Input, FormControl } from "@chakra-ui/react"
 import DailyBox from "./daily-box"
+import Current from "./current"
+import ResponsiveBlock from "./shared/responsive-block"
+import Rain from "~images/rain.jpg"
+import Clouds from "~images/clouds.jpg"
 
-const Home = () => {
-    const [loaded, setIsLoaded] = useState(false)
-    const [error, setError] = useState("")
-    const [city, setCity] = useState("Baton Rouge")
-    const [data, setData] = useState([])
+const SevenDayForcast = () => {
+    const [cityInput, setCityInput] = useState()
+    const [cityDisplay, setCityDisplay] = useState("")
+    const [data, setData] = useState<any>([])
+    const [latData, setLatData] = useState<any>(30.45075)
+    const [lonData, setLonData] = useState<any>(-91.154549)
+    const [currentData, setCurrentData] = useState<any>([])
+    const [currentWeather, setCurrentWeather] = useState<any>("")
+
+    const Jsondata = require("../../data.json")
 
     useEffect(() => {
+        for (var i = 0; i < Jsondata.length; i++) {
+            var data = Jsondata[i]
+            if (data.name == cityInput)
+                return (
+                    console.log("changed"),
+                    setCityDisplay(data.name),
+                    setLonData(Jsondata[i].coord.lon),
+                    setLatData(Jsondata[i].coord.lat)
+                )
+        }
+    }, [cityInput])
+
+    //get forcast data
+    useEffect(() => {
         fetch(
-            "https://api.openweathermap.org/data/2.5/onecall?lat=30.4515&lon=-91.1871&units=imperial&appid=539f07a626290bbc412db2236db4de1f"
+            `https://api.openweathermap.org/data/2.5/onecall?lat=${latData}&lon=${lonData}&units=imperial&appid=539f07a626290bbc412db2236db4de1f`
         )
             .then(res => res.json())
             .then(
                 result => {
-                    setIsLoaded(true)
-                    console.log("********")
-                    console.log(result)
                     setData(result.daily)
-                    console.log("********")
                 },
                 error => {
-                    setIsLoaded(true)
-                    setError(error)
+                    console.log(error)
                 }
             )
-    }, [])
+    }, [cityDisplay])
 
-    return (
-        <Flex justify="center">
+    //get current data
+    useEffect(() => {
+        fetch(
+            `https://api.openweathermap.org/data/2.5/onecall?lat=${latData}&lon=${lonData}&units=imperial&appid=539f07a626290bbc412db2236db4de1f`
+        )
+            .then(res => res.json())
+            .then(
+                result => {
+                    setCurrentData(result.current)
+                    setCurrentWeather(result.current.weather[0])
+                },
+                error => {
+                    console.log(error)
+                }
+            )
+    }, [cityDisplay])
+
+    if (cityDisplay == "")
+        return (
             <Box>
-                <Text align="center" fontSize="30px">
-                    Weather Forecast for {city}
-                </Text>
-                <Flex
-                    gridColumnGap={5}
-                    direction={["column", "column", "column", "row"]}
-                >
-                    {data.map(item => (
-                        <Box width="max-content">
-                            <DailyBox
-                                day={item.dt}
-                                high={item.temp.max}
-                                low={item.temp.min}
-                                chance_of_rain={item.pop}
-                            />
-                        </Box>
-                    ))}
+                <Flex justify="flex-start" m={10}>
+                    <Input
+                        pr={20}
+                        w="max-content"
+                        placeholder="type city here"
+                        onChange={(e: any) => {
+                            setCityInput(e.target.value), console.log(cityInput)
+                        }}
+                        value={cityInput}
+                    />
                 </Flex>
-                {/* <DailyBox
-                    date={new Date().toDateString()}
-                    high="90"
-                    low="70"
-                    chance_of_rain="100%"
-                /> */}
             </Box>
-        </Flex>
-    )
+        )
+    else
+        return (
+            <Box>
+                <Flex justify="flex-start" m={10}>
+                    <Input
+                        pr={20}
+                        w="max-content"
+                        placeholder="type city here"
+                        onChange={(e: any) => {
+                            setCityInput(e.target.value), console.log(cityInput)
+                        }}
+                        value={cityInput}
+                    />
+                </Flex>
+                <ResponsiveBlock>
+                    <Flex justify="center">
+                        <Box>
+                            <Text align="center" fontSize="40px" mb={10}>
+                                {cityDisplay}
+                            </Text>
+                            <Current
+                                day={currentData.dt}
+                                temp={currentData.temp}
+                                condition={currentWeather.description}
+                                id={currentWeather.id}
+                                feels_like={currentData.feels_like}
+                                humidity={currentData.humidity}
+                            />
+                            <Text mt={4}>Daily:</Text>
+                            <Flex
+                                gridColumnGap={5}
+                                direction={[
+                                    "column",
+                                    "column",
+                                    "column",
+                                    "row",
+                                ]}
+                            >
+                                {data.map((item: any) => (
+                                    <Box width="max-content" mt={4}>
+                                        <DailyBox
+                                            day={item.dt}
+                                            high={parseInt(item.temp.max)
+                                                .toFixed(0)
+                                                .toString()}
+                                            low={parseInt(item.temp.min)
+                                                .toFixed(0)
+                                                .toString()}
+                                            chance_of_rain={item.pop}
+                                        />
+                                    </Box>
+                                ))}
+                            </Flex>
+                            <Box align="center" py={20}></Box>
+                        </Box>
+                    </Flex>
+                </ResponsiveBlock>
+            </Box>
+        )
 }
 
-export default Home
+export default SevenDayForcast
