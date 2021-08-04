@@ -5,7 +5,7 @@ const Nav = () => {
     return (
         <Box bg="#4f5459">
             <Text py={4} px={10} color="white">
-                Weather...
+                Weather App
             </Text>
         </Box>
     )
