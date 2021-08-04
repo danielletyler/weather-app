@@ -3,8 +3,8 @@ import { Box, Text } from "@chakra-ui/layout"
 
 const Nav = () => {
     return (
-        <Box bg="darkgrey">
-            <Text py={2} px={10} color="white">
+        <Box bg="#4f5459">
+            <Text py={4} px={10} color="white">
                 Weather...
             </Text>
         </Box>

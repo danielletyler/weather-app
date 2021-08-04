@@ -10,7 +10,8 @@ const Current: React.FC<{
     id: string
     feels_like: string
     humidity: string
-}> = ({ day, temp, condition, id, feels_like, humidity }) => {
+    color: string
+}> = ({ day, temp, condition, id, feels_like, humidity, color }) => {
     const dateTimeString = moment.unix(parseInt(day)).format("MM-DD-YYYY")
     const finalDate = new Date(dateTimeString).toDateString().slice(0, 10)
 
@@ -26,21 +27,25 @@ const Current: React.FC<{
                         <WeatherIcon
                             id_mid={id_mid}
                             id_string={id_string}
-                            color="black"
+                            color={color}
                         />
                     </Flex>
                     <Flex direction="column" justify="space-around">
-                        <Text fontSize="50px">
+                        <Text fontSize="50px" color={color}>
                             {parseInt(temp).toFixed(0)}°
                         </Text>
                     </Flex>
                 </Flex>
-                <Text mb={4} fontSize="30px">
+                <Text mb={4} fontSize="30px" color={color}>
                     {condition}
                 </Text>
                 <Flex justify="center" gridColumnGap={10}>
-                    <Text>Feels like: {parseInt(feels_like).toFixed(0)}° </Text>
-                    <Text>Humidity: {humidity}%</Text>
+                    <Text fontWeight="semibold" color={color}>
+                        Feels like: {parseInt(feels_like).toFixed(0)}°{" "}
+                    </Text>
+                    <Text fontWeight="semibold" color={color}>
+                        Humidity: {humidity}%
+                    </Text>
                 </Flex>
             </Flex>
         </Flex>

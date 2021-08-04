@@ -6,7 +6,7 @@ import Nav from "~components/nav"
 
 const IndexPage = () => {
     return (
-        <Box h="100vh">
+        <Box h="100vh" bg="#2d3033">
             <Nav />
             <Box>
                 <SevenDayForcast />

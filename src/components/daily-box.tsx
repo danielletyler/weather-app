@@ -11,7 +11,8 @@ const DailyBox: React.FC<{
     high: string
     low: string
     chance_of_rain: string
-}> = ({ day, high, low, chance_of_rain }) => {
+    color: string
+}> = ({ day, high, low, chance_of_rain, color }) => {
     const [b, setb] = useState("transparent")
 
     //date conversion
@@ -22,27 +23,30 @@ const DailyBox: React.FC<{
 
     useEffect(() => {
         if (dateTimeString == format(new Date(), "MM-dd-yyyy"))
-            setb("1px solid white")
+            setb("rgba(255, 255, 255, 0.25)")
     }, [])
 
     return (
-        <Box border={b} borderRadius="xl" p={4}>
+        <Box bg={b} borderRadius="xl" p={4}>
             <Flex direction="column" gridRowGap={2}>
-                <Text fontWeight={700} color="black">
+                <Text fontWeight={700} color={color}>
                     {finalDate}
                 </Text>
                 <Flex gridColumnGap={2}>
-                    <Text fontWeight={600}> {high} °F</Text>
-                    <Text>{low} °F</Text>
+                    <Text color={color} fontWeight={600}>
+                        {" "}
+                        {high} °F
+                    </Text>
+                    <Text color={color}>{low} °F</Text>
                 </Flex>
                 <Flex gridColumnGap={1} justify="center">
                     <Icon
-                        color="black"
+                        color={color}
                         mt={1}
                         fontSize="15px"
                         as={GiWaterDrop}
                     />
-                    <Text>
+                    <Text color={color}>
                         {(parseFloat(chance_of_rain) * 100).toFixed(0)}%
                     </Text>
                 </Flex>

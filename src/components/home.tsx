@@ -5,8 +5,13 @@ import Current from "./current"
 import ResponsiveBlock from "./shared/responsive-block"
 import Rain from "~images/rain.jpg"
 import Clouds from "~images/clouds.jpg"
+import Clear from "~images/clear.jpg"
+import Snowing from "~images/snowing.jpg"
+import Storm from "~images/storm.jpg"
+import Fog from "~images/fog.jpg"
 
 const SevenDayForcast = () => {
+    const [bgimage, setBgimage] = useState("")
     const [cityInput, setCityInput] = useState()
     const [cityDisplay, setCityDisplay] = useState("")
     const [data, setData] = useState<any>([])
@@ -14,18 +19,23 @@ const SevenDayForcast = () => {
     const [lonData, setLonData] = useState<any>(-91.154549)
     const [currentData, setCurrentData] = useState<any>([])
     const [currentWeather, setCurrentWeather] = useState<any>("")
+    const [getImage, setGetImage] = useState(false)
 
     const Jsondata = require("../../data.json")
+    const BigJsonData = require("../../city.list.json")
 
     useEffect(() => {
-        for (var i = 0; i < Jsondata.length; i++) {
-            var data = Jsondata[i]
-            if (data.name == cityInput)
+        for (var i = 0; i < BigJsonData.length; i++) {
+            var data = BigJsonData[i]
+            var dataCity = data.name
+            var dataState = data.state
+            var location = dataCity + ", " + dataState
+            if (location == cityInput)
                 return (
                     console.log("changed"),
-                    setCityDisplay(data.name),
-                    setLonData(Jsondata[i].coord.lon),
-                    setLatData(Jsondata[i].coord.lat)
+                    setCityDisplay(data.name + ", " + data.state),
+                    setLonData(BigJsonData[i].coord.lon),
+                    setLatData(BigJsonData[i].coord.lat)
                 )
         }
     }, [cityInput])
@@ -56,6 +66,7 @@ const SevenDayForcast = () => {
                 result => {
                     setCurrentData(result.current)
                     setCurrentWeather(result.current.weather[0])
+                    setGetImage(!getImage)
                 },
                 error => {
                     console.log(error)
@@ -63,11 +74,29 @@ const SevenDayForcast = () => {
             )
     }, [cityDisplay])
 
+    const id_mid = "" + currentWeather.id
+    const id_string = id_mid.charAt(0)
+
+    //get correct bg image
+    useEffect(() => {
+        if (id_string == "8") {
+            if (id_mid == "800") return setBgimage(Clear)
+            else return setBgimage(Clouds)
+        }
+        if (id_string == "7") return setBgimage(Fog)
+        if (id_string == "6") return setBgimage(Snowing)
+        if (id_string == "5") return setBgimage(Rain)
+        if (id_string == "3") return setBgimage(Rain)
+        if (id_string == "2") return setBgimage(Storm)
+        else return setBgimage("default")
+    }, [getImage])
+
     if (cityDisplay == "")
         return (
             <Box>
                 <Flex justify="flex-start" m={10}>
                     <Input
+                        color="white"
                         pr={20}
                         w="max-content"
                         placeholder="type city here"
@@ -82,8 +111,9 @@ const SevenDayForcast = () => {
     else
         return (
             <Box>
-                <Flex justify="flex-start" m={10}>
+                <Flex justify="flex-start" mx={10} my={5}>
                     <Input
+                        color="white"
                         pr={20}
                         w="max-content"
                         placeholder="type city here"
@@ -96,18 +126,38 @@ const SevenDayForcast = () => {
                 <ResponsiveBlock>
                     <Flex justify="center">
                         <Box>
-                            <Text align="center" fontSize="40px" mb={10}>
-                                {cityDisplay}
-                            </Text>
-                            <Current
-                                day={currentData.dt}
-                                temp={currentData.temp}
-                                condition={currentWeather.description}
-                                id={currentWeather.id}
-                                feels_like={currentData.feels_like}
-                                humidity={currentData.humidity}
-                            />
-                            <Text mt={4}>Daily:</Text>
+                            <Box
+                                backgroundImage={`url(${bgimage})`}
+                                bgPosition="top"
+                                bgSize="cover"
+                                borderRadius="xl"
+                                overflow="clip"
+                            >
+                                <Box
+                                    mt={10}
+                                    mb={20}
+                                    py={7}
+                                    bg="rgba(255, 255, 255, 0.30)"
+                                >
+                                    <Text
+                                        color="black"
+                                        align="center"
+                                        fontSize="40px"
+                                        mb={5}
+                                    >
+                                        {cityDisplay}
+                                    </Text>
+                                    <Current
+                                        day={currentData.dt}
+                                        temp={currentData.temp}
+                                        condition={currentWeather.description}
+                                        id={currentWeather.id}
+                                        feels_like={currentData.feels_like}
+                                        humidity={currentData.humidity}
+                                        color="black"
+                                    />
+                                </Box>
+                            </Box>
                             <Flex
                                 gridColumnGap={5}
                                 direction={[
@@ -128,6 +178,7 @@ const SevenDayForcast = () => {
                                                 .toFixed(0)
                                                 .toString()}
                                             chance_of_rain={item.pop}
+                                            color="white"
                                         />
                                     </Box>
                                 ))}
