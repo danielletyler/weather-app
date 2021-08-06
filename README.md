@@ -1,54 +1,47 @@
-<p align="center">
-  <a href="https://www.gatsbyjs.com/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby minimal starter
-</h1>
+# Weather App
 
-## 🚀 Quick start
+> A web application that allows you to the check the weather in any city in the world.
 
-1.  **Create a Gatsby site.**
+## Technologies Used
 
-    Use the Gatsby CLI to create a new site, specifying the minimal starter.
+-   React - version 3.5.1
+-   Chakra UI - version 1.6.0
+-   OpenWeather API
 
-    ```shell
-    # create a new Gatsby site using the minimal starter
-    npm init gatsby
-    ```
+## Screenshots
 
-2.  **Start developing.**
+![Dashboard](./weather_app.png)
 
-    Navigate into your new site’s directory and start it up.
+## Setup
 
-    ```shell
-    cd my-gatsby-site/
-    npm run develop
-    ```
+To run this project, install it locally using yarn or npm
 
-3.  **Open the code and start customizing!**
+yarn
 
-    Your site is now running at http://localhost:8000!
+```
+$ cd ../weather-app
+$ yarn
+$ yarn start
+```
 
-    Edit `src/pages/index.js` to see your site update in real-time!
+npm
 
-4.  **Learn more**
+```
+$ cd ../weather-app
+$ npm install
+$ npm start
+```
 
-    - [Documentation](https://www.gatsbyjs.com/docs/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+## Usage
 
-    - [Tutorials](https://www.gatsbyjs.com/tutorial/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+-   Type in the location in which you wish to check the weather using the format: City, State Abbreviation
+-   For cities outside of the US use the format: City,
 
-    - [Guides](https://www.gatsbyjs.com/tutorial/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+## Features
 
-    - [API Reference](https://www.gatsbyjs.com/docs/api-reference/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+-   Get current weather of desired city
+-   See the forcast for the next 7 days
 
-    - [Plugin Library](https://www.gatsbyjs.com/plugins?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+## Contact
 
-    - [Cheat Sheet](https://www.gatsbyjs.com/docs/cheat-sheet/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-
-## 🚀 Quick start (Gatsby Cloud)
-
-Deploy this starter with one click on [Gatsby Cloud](https://www.gatsbyjs.com/cloud/):
-
-[<img src="https://www.gatsbyjs.com/deploynow.svg" alt="Deploy to Gatsby Cloud">](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-minimal)
+Created by [Dani Tyler](https://www.dani-tyler.com)
